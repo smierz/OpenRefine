@@ -23,6 +23,7 @@ public class MySQLDatabaseIT {
             .withInitScript("mysql/init.sql");
 
     // application setup
+    private static String testTableName = "test_table"; // see init script
     private static DatabaseConfiguration testDbConfig;
 
     @BeforeClass
@@ -46,6 +47,10 @@ public class MySQLDatabaseIT {
     @AfterClass
     public static void stopContainer() {
         mySQLContainer.stop();
+    }
+
+    static String getTestTableName() {
+        return testTableName;
     }
 
     static DatabaseConfiguration getTestDbConfig() {
