@@ -14,7 +14,8 @@ public class MySQLDatabaseIT {
             .withExposedPorts(3306)
             .withDatabaseName("test_db")
             .withUsername("mysql_root")
-            .withPassword("secret");
+            .withPassword("secret")
+            .withInitScript("mysql/init.sql");
 
     @BeforeClass
     public static void startContainer() {
