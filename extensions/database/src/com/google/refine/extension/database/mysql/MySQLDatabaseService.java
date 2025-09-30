@@ -61,7 +61,7 @@ public class MySQLDatabaseService extends DatabaseService {
 
     public static MySQLDatabaseService getInstance() {
         if (instance == null) {
-            SQLType.registerSQLDriver(DB_NAME, DB_DRIVER, false);
+            SQLType.registerSQLDriver(DB_NAME, DB_DRIVER);
             instance = new MySQLDatabaseService();
             if (logger.isDebugEnabled()) {
                 logger.debug("MySQLDatabaseService Instance: {}", instance);

@@ -58,7 +58,7 @@ public class SQLiteDatabaseService extends DatabaseService {
 
     public static SQLiteDatabaseService getInstance() {
         if (instance == null) {
-            SQLType.registerSQLDriver(DB_NAME, DB_DRIVER, false);
+            SQLType.registerSQLDriver(DB_NAME, DB_DRIVER);
             instance = new SQLiteDatabaseService();
             if (logger.isDebugEnabled()) {
                 logger.debug("SQLiteDatabaseService Instance: {}", instance);

@@ -51,11 +51,7 @@ public final class SQLType {
     }
 
     public static SQLType registerSQLDriver(String identifier, String classpath) {
-        return registerSQLDriver(identifier, classpath, true);
-    }
-
-    public static SQLType registerSQLDriver(String identifier, String classpath, boolean useJDBCManager) {
-        DriverContainer driverContainer = new DriverContainer(identifier, classpath, useJDBCManager);
+        DriverContainer driverContainer = new DriverContainer(identifier, classpath);
         if (!jdbcDriverRegistry.containsKey(driverContainer)) {
             SQLType newType = new SQLType(driverContainer);
             jdbcDriverRegistry.put(driverContainer, newType);
@@ -72,26 +68,19 @@ public final class SQLType {
         return this.driverContainer.identifier;
     }
 
-    public boolean usesJDBCManager() {
-        return this.driverContainer.useJDBCManager;
-    }
-
     private static class DriverContainer {
 
         public final String classpath;
         public final String identifier;
-        public final boolean useJDBCManager;
 
-        private DriverContainer(String identifier, String classpath, boolean useJDBCManager) {
+        private DriverContainer(String identifier, String classpath) {
             this.classpath = classpath;
             this.identifier = identifier;
-            this.useJDBCManager = useJDBCManager;
         }
 
         public final boolean equals(Object obj) {
             return obj instanceof DriverContainer && ((DriverContainer) obj).classpath.equals(this.classpath)
-                    && ((DriverContainer) obj).identifier.equals(this.identifier)
-                    && ((DriverContainer) obj).useJDBCManager == this.useJDBCManager;
+                    && ((DriverContainer) obj).identifier.equals(this.identifier);
         }
     }
 }
