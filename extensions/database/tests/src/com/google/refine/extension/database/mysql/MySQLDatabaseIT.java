@@ -6,6 +6,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import com.google.refine.extension.database.DatabaseConfiguration;
+import com.google.refine.extension.database.DatabaseService;
 
 public class MySQLDatabaseIT {
 
@@ -37,6 +38,9 @@ public class MySQLDatabaseIT {
         testDbConfig.setDatabasePassword(mySQLContainer.getPassword());
         testDbConfig.setDatabaseUser(mySQLContainer.getUsername());
         testDbConfig.setUseSSL(false);
+
+        // register MySQL database service
+        DatabaseService.DBType.registerDatabase(MySQLDatabaseService.DB_NAME, MySQLDatabaseService.getInstance());
     }
 
     @AfterClass
