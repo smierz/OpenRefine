@@ -37,7 +37,6 @@ try {
     }
 
 } catch (err) {
-    console.log(`Error reading depedencies.json: ${err}`);
+    console.log(`Error reading dependencies.json: ${err}`);
     process.exit(-1);
-    
 }
