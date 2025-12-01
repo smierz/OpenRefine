@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const FROM_DIR = 'node_modules';
-const TO_DIR = 'modules/core/3rdparty';
+const FROM_DIR = path.join('node_modules');
+const TO_DIR = path.join('modules', 'core', '3rdparty');
 
 if (!fs.existsSync(TO_DIR)) {
     fs.mkdirSync(TO_DIR);
@@ -15,7 +15,7 @@ try {
 
     const DIRS = dependencies.directories;
     for (const dir of DIRS) {
-        const dirPath = TO_DIR+'/'+dir;
+        const dirPath = path.join(TO_DIR, dir);
         if (!fs.existsSync(dirPath)) {
             fs.mkdirSync(dirPath);
             console.log('Directory '+dirPath+' created.');
@@ -27,12 +27,9 @@ try {
 
     for (const item of PATHS) {
         const from = item.from;
-        const fromPath = FROM_DIR + '/' + from;
-        let to = item.to;
-        if (to === '') {
-            to = from;
-        }
-        const toPath = TO_DIR + '/' + to;
+        const fromPath = path.join(FROM_DIR, from);
+        const to = item.to === '' ? from : item.to;
+        const toPath = path.join(TO_DIR, to);
 
         if (fs.lstatSync(fromPath).isDirectory()) { // copy directory
             console.log(`Copy all files of folder ${fromPath}`);
