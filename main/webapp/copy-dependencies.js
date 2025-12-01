@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 
 const FROM_DIR = 'node_modules';
 const TO_DIR = 'modules/core/3rdparty';
@@ -14,10 +15,10 @@ try {
 
     const DIRS = dependencies.directories;
     for (const dir of DIRS) {
-        const path = TO_DIR+'/'+dir;
-        if (!fs.existsSync(path)) {
-            fs.mkdirSync(path);
-            console.log('Directory '+path+' created.');
+        const dirPath = TO_DIR+'/'+dir;
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath);
+            console.log('Directory '+dirPath+' created.');
         }
     }
 
@@ -32,11 +33,36 @@ try {
             to = from;
         }
         const toPath = TO_DIR + '/' + to;
-        fs.copyFileSync(fromPath, toPath);
-        console.log(fromPath + ' was copied to ' + toPath);
+
+        if (fs.lstatSync(fromPath).isDirectory()) { // copy directory
+            console.log(`Copy all files of folder ${fromPath}`);
+            copyFolderRecursively(fromPath, toPath);
+        } else { // copy single file
+            fs.copyFileSync(fromPath, toPath);
+            console.log(`${fromPath} was copied to ${toPath}`);
+        }
     }
 
 } catch (err) {
     console.log(`Error reading dependencies.json: ${err}`);
     process.exit(-1);
+}
+
+function copyFolderRecursively(from, to) {
+    if (!fs.existsSync(to)) {
+        fs.mkdirSync(to);
+    }
+
+    const entries = fs.readdirSync(from, { withFileTypes: true });
+    for (const entry of entries) {
+        const fromPath = path.join(from, entry.name);
+        const toPath = path.join(to, entry.name);
+
+        if (entry.isFile()) {  // end condition
+            fs.copyFileSync(fromPath, toPath);
+            console.log(`- ${fromPath} was copied to ${toPath}`);
+        } else if (entry.isDirectory()) {   // recursive
+            copyFolderRecursively(fromPath, toPath);
+        }
+    }
 }
